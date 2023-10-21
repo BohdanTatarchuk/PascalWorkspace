@@ -5,6 +5,7 @@
    abwechselnden Leerzeichen und Sternchen * ausgibt.
    ---------------------------------------------------------------------------------------
 *)
+
 PROGRAM Schachbrett;
    VAR
       i, j, input: INTEGER;
