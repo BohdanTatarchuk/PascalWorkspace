@@ -7,15 +7,16 @@
    -----------------------------------------------------------------------------------------------
 *)
 
-program Saulendiagramm;
+program Diagram;
 
 const
-  MaxAnzahl = 40;
-  MinZahl = 1;
-  MaxZahl = 10;
+  Max = 40;
+  Min = 1;
+  MinV = 1;
+  MaxV = 10;
 
 type
-  VArray = array[1..MaxAnzahl] of integer;
+  VArray = array[Min..Max] of integer;
 
 var
   ch: char;
@@ -43,12 +44,12 @@ begin
       Readln(values[i]);
 
       //check if the values are between 1 and 10
-      IF ((values[i] < 1) or (values[i] > 10)) THEN BEGIN
+      IF ((values[i] < MinV) or (values[i] > MaxV)) THEN BEGIN
         WriteLn('Error: value is out of range between 1 and 10');
         exit;
       END;//if
     END; //for
-end;
+END;
 
 procedure output1(ch: char; Zahlen: VArray; n: integer);
 var
@@ -96,7 +97,7 @@ var
   i: integer;
 begin
   
-  IF (maxValue = 10) THEN BEGIN
+  IF (maxValue = MaxV) THEN BEGIN
     Write('  +');
   END ELSE BEGIN
     Write(' +');
@@ -122,7 +123,7 @@ begin
   inputN(n);
 
   //check if n is between 2 and 40 
-  if (n < 2) or (n > 40) then
+  if (Min + 1 > n) or (n > Max) then
   begin
     writeln('Error: n must be in range between 2 and 40');
     exit;
@@ -130,7 +131,7 @@ begin
 
   inputValues(values, n);
 
-  maxValue := 1;
+  maxValue := minV;
   //Getting the highest value of the array
   FOR a := 1 TO n DO BEGIN
     IF values[a] > maxValue THEN BEGIN
@@ -138,10 +139,10 @@ begin
     END;
   END;
 
-  IF (maxValue < 10) THEN BEGIN
+  IF (maxValue < maxV) THEN BEGIN
     output1(ch, values, n);
     design(n);
-  END ELSE IF (maxValue = 10) THEN BEGIN
+  END ELSE IF (maxValue = maxV) THEN BEGIN
     output2(ch, values, n);
     design(n);
   END ELSE BEGIN
