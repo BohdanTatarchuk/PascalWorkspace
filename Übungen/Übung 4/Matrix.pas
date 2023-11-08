@@ -20,9 +20,9 @@ BEGIN (* Unity *)
 
   FOR i := 1 TO 3 DO BEGIN
     FOR j := 1 TO 3 DO BEGIN
-      Matrix[i, j] := 2.0;
+      Matrix[i, j] := 0.0;
     END; (* FOR *)
-    Matrix[i, i] := 5.0;
+    Matrix[i, i] := 132.0;
   END; (* FOR *)
 
   Unity := Matrix;
