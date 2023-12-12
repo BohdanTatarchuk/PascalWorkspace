@@ -1,19 +1,20 @@
-PROGRAM syntaxTest;
+PROGRAM ProgramName;
+PROCEDURE ProcedureName(var arr: array of integer);
 
 VAR
-  x, y, z: integer;
-  a,b,c: boolean;
+  i: integer;
+BEGIN (* ProcedureName *)
+  SetLength(arr, 10);
+  FOR i := 0 TO 9 DO BEGIN
+    arr[i] := i;
+  END; (* FOR *)
 
-
-BEGIN (* syntaxTest *)
-  c := not not a;
-  c := not (not a);
-  z := - - x;
-  Z := - (-x);
-  z := + + x;
-
-  //c := x >= 0 and y >= 0; doesnt work
-
-  c := (x >= 0) and ( y >= 0);
-  
-END. (* syntaxTest *)
+  FOR i := 0 TO 9 DO BEGIN
+    WriteLn(arr[i]);
+  END; (* FOR *)
+END; (* ProcedureName *)
+VAR
+  arr: array of integer;
+BEGIN (* ProgramName *)
+  ProcedureName(arr);
+END. (* ProgramName *)

@@ -1,0 +1,60 @@
+PROGRAM AveragePerWeekday;
+
+TYPE
+  WeekdayValues = ARRAY [1..7] OF REAL;
+
+PROCEDURE CalculateAveragePerWeekday(measuredValues: ARRAY OF REAL; n: INTEGER; VAR avg: WeekdayValues);
+VAR
+  i, dayOfWeek, count: INTEGER;
+BEGIN
+  // Initialisierung von avg
+  FOR i := 1 TO 7 DO
+  BEGIN
+    avg[i] := 0.0;
+  END;
+
+  // Berechnung der Summe und Anzahl für jeden Wochentag
+  FOR i := 0 TO n - 1 DO
+  BEGIN
+    dayOfWeek := (i mod 7) + 1; // 1=Montag, 2=Dienstag, ..., 7=Sonntag
+    avg[dayOfWeek] := avg[dayOfWeek] + measuredValues[i];
+    Inc(count);
+  END;
+
+  // Berechnung des Durchschnitts für jeden Wochentag
+  FOR i := 1 TO 7 DO
+  BEGIN
+    IF count > 0 THEN
+      avg[i] := avg[i] / count;
+  END;
+END;
+
+VAR
+  measuredValues: ARRAY OF REAL;
+  avg: WeekdayValues;
+  i: INTEGER;
+
+BEGIN
+  // Beispiel-Messwerte
+  SetLength(measuredValues, 11);
+  measuredValues[0] := 8.0;
+  measuredValues[1] := 8.0;
+  measuredValues[2] := 21.0;
+  measuredValues[3] := 12.0;
+  measuredValues[4] := 8.5;
+  measuredValues[5] := 9.5;
+  measuredValues[6] := 11.0;
+  measuredValues[7] := 8.0;
+  measuredValues[8] := 9.0;
+  measuredValues[9] := 9.0;
+  measuredValues[10] := 8.0;
+
+  // Berechnung des Durchschnitts
+  CalculateAveragePerWeekday(measuredValues, Length(measuredValues), avg);
+
+  // Ausgabe der Durchschnittswerte
+  FOR i := 1 TO 7 DO
+    WriteLn('Durchschnitt für Wochentag ', i, ': ', avg[i]:0:2);
+
+  ReadLn;
+END.
