@@ -1,82 +1,113 @@
-PROGRAM Strom;
+program WordFrequency;
 
-CONST
- weekdays = 7;
- n = 11;
-
-TYPE
- WeekdayValues = ARRAY [1..weekdays] OF REAL;
-
-//declarates an array measuredValues
-procedure declarate(var measuredValues: array of real);
-
-var 
-  i: integer;
-
-begin
-  for i := low(measuredValues) to high(measuredValues) do begin 
-    measuredValues[i] := i + 0.5;
+type
+  WordNodePtr = ^WordNode;
+  WordNode = record
+    prev, next: WordNodePtr;
+    word: string;
+    n: integer; (* frequency of word *)
   end;
-end;
 
-//calculates an avarage power consumption per week
-PROCEDURE AveragePerWeekday(measuredValues: ARRAY OF REAL; n: INTEGER; VAR avg: WeekdayValues);
-
+procedure AddWord(var head: WordNodePtr; newWord: string);
 var
-  i, j, numOfWeeks, dayOfWeek: integer;
-
+  currentNode, newNode: WordNodePtr;
 begin
-  numOfWeeks := (n div 7) + 1;
+  currentNode := head;
 
-  // for i := 1 to numOfWeeks do begin
-  //   for j := low(avg) to high(avg) do begin
-  //     avg[j] := measuredValues[j];
-  //     if (j + (i * weekdays) < n) then begin
-  //       avg[j] := (avg[j] + measuredValues[j + (i * weekdays)]) / i;
-  //     end;
-  //   end;
-  // end;
+  // Check if the list is empty
+  if head = nil then
+  begin
+    newNode := new(WordNodePtr);
+    newNode^.word := newWord;
+    newNode^.n := 1;
+    newNode^.prev := newNode;
+    newNode^.next := newNode;
+    head := newNode;
+    Exit;
+  end;
 
-  for j := 1 to numOfWeeks do begin
-    for i := 0 to n - 1 do begin
-      dayOfWeek := (i mod weekdays) + 1;
-      if (weekdays * (j - 1) + dayOfWeek <= n - 1) then
-      avg[dayOfWeek] := avg[dayOfWeek] + measuredValues [weekdays * (j - 1) + dayOfWeek];
+  repeat
+    if currentNode^.word = newWord then
+    begin
+      Inc(currentNode^.n);
+      Exit;
     end;
-  end;
-end; 
+    currentNode := currentNode^.next;
+  until currentNode = head;
 
-//outputs an array
-procedure output(avg: array of real);
-
-var 
-  i: integer;
-
-begin
-  for i := low(avg) to high(avg) do begin
-    Write(i, ': ',avg[i]:5:2, ' ');
-  end;
+  newNode := new(WordNodePtr);
+  newNode^.word := newWord;
+  newNode^.n := 1;
+  newNode^.prev := head^.prev;
+  newNode^.next := head;
+  head^.prev^.next := newNode;
+  head^.prev := newNode;
+  head := newNode;
 end;
 
-//global variables
-var
-  measuredValues: array [1..n] of real;
-  avg: WeekdayValues;
 
-BEGIN (* Strom *)
-  //declarate(measuredValues);
-  measuredValues[1] := 8.0;
-  measuredValues[2] := 8.0;
-  measuredValues[3] := 21.0;
-  measuredValues[4] := 12.0;
-  measuredValues[5] := 8.5;
-  measuredValues[6] := 9.0;
-  measuredValues[7] := 11.0;
-  measuredValues[8] := 8.0;
-  measuredValues[9] := 9.0;
-  measuredValues[10] := 9.0;
-  measuredValues[11] := 8.0;
-  AveragePerWeekday(measuredValues, n , avg);
-  output(measuredValues); Writeln;
-  output(avg);
-END. (* Strom *)
+procedure RemoveSingleOccurrences(var head: WordNodePtr);
+var
+  currentNode, nextNode: WordNodePtr;
+begin
+  if head = nil then
+    Exit;
+
+  currentNode := head;
+
+  repeat
+    nextNode := currentNode^.next;
+
+    if currentNode^.n = 1 then
+    begin
+      if currentNode = head then
+        head := nextNode;
+
+      currentNode^.prev^.next := nextNode;
+      nextNode^.prev := currentNode^.prev;
+
+      dispose(currentNode);
+    end;
+
+    currentNode := nextNode;
+  until currentNode = head;
+end;
+
+procedure PrintWordFrequencies(head: WordNodePtr);
+var
+  currentNode: WordNodePtr;
+begin
+  if head = nil then
+    Exit;
+
+  currentNode := head;
+
+  repeat
+    writeln('Word: ', currentNode^.word, ', Frequency: ', currentNode^.n);
+    currentNode := currentNode^.next;
+  until currentNode = head;
+end;
+
+var
+  head: WordNodePtr;
+
+procedure ProcessWords;
+var
+  inputWord: string;
+begin
+  head := nil;
+
+  writeln('Enter words (type "exit" to finish):');
+  repeat
+    readln(inputWord);
+    if inputWord <> 'exit' then
+      AddWord(head, inputWord);
+  until inputWord = 'exit';
+
+  RemoveSingleOccurrences(head);
+  PrintWordFrequencies(head);
+end;
+
+begin
+  ProcessWords;
+end.

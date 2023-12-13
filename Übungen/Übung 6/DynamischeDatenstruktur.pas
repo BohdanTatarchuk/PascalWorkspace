@@ -1,4 +1,5 @@
-(* Dynamische Datenstruktur                                             Bohdan Tatarchuk, 07-12-2023
+
+(* Dynamische Datenstruktur                                             Bohdan Tatarchuk, 07-12-2023+
    ------------------------               
    Für eine Textverarbeitungssoftware wird eine dynamische Datenstruktur benötigt, in der eine 
    Sequenz von beliebig vielen Wörtern (vom Datentyp STRING) in Form einer einfach-verketteten Liste
@@ -14,7 +15,8 @@ CONST
 TYPE
   WordNodePtr = ^WordNode;
   WordNode = RECORD
-                next: WordNodePtr;
+                next: WordNodePtr;#?@
+
                 words: string[maxWordLength];
              END; (* WordNode *)
   WordListPtr = WordNodePtr;
